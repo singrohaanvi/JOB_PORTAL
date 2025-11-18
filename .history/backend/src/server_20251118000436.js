@@ -3,9 +3,6 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
-import http from "http";            // <-- ADD THIS
-import { Server } from "socket.io"; // <-- ADD THIS
-
 import connectDB from "./config/db.js";
 import redisClient from "./utils/redisClient.js";
 
@@ -16,7 +13,7 @@ import applicationRoutes from "./routes/applicationRoutes.js";
 import savedJobsRoutes from "./routes/savedRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
 import resumeRoutes from "./routes/resumeRoutes.js";
-import { uploadPath } from "./middleware/uploadMiddleware.js";
+import { upload, uploadPath } from "./middleware/uploadMiddleware.js";
 
 dotenv.config();
 const app = express();
@@ -31,10 +28,9 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
 app.use(express.json());
-connectDB();
 
+connectDB();
 app.use("/uploads", express.static(uploadPath));
 
 app.use("/api/auth", authRoutes);
@@ -47,31 +43,5 @@ app.use("/api/resume", resumeRoutes);
 
 app.get("/", (req, res) => res.send("API is running..."));
 
-/* ---------------------- SOCKET.IO SETUP ---------------------- */
-
-const server = http.createServer(app); // create http server
-
-const io = new Server(server, {
-  cors: {
-    origin: "http://localhost:5173",
-  },
-});
-
-global.io = io; // make it accessible globally
-
-io.on("connection", (socket) => {
-  console.log("🔥 User connected:", socket.id);
-
-  socket.on("disconnect", () => {
-    console.log("❌ User disconnected:", socket.id);
-  });
-});
-
-/* ------------------------------------------------------------- */
-
 const PORT = process.env.PORT || 5000;
-
-// IMPORTANT: use server.listen() not app.listen()
-server.listen(PORT, () =>
-  console.log(`🔥 Server + WebSocket running on port ${PORT}`)
-);
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -1,4 +1,5 @@
 // applicationController.js
+import prisma from "../config/prisma.js";
 import redisClient from "../utils/redisClient.js";
 
 // --------------------- APPLY TO JOB ------------------------

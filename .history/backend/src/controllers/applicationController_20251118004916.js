@@ -1,5 +1,6 @@
 // applicationController.js
-import redisClient from "../utils/redisClient.js";
+import prisma from "../config/prisma.js";
+import { redisClient } from "../config/redis.js";  // <-- ADD THIS
 
 // --------------------- APPLY TO JOB ------------------------
 export const applyToJob = async (req, res) => {

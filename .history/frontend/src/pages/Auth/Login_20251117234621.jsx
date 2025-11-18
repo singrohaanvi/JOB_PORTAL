@@ -30,10 +30,12 @@ const Login = () => {
     success: false,
   });
 
-  // Input change handler
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
 
     if (formState.errors[name]) {
       setFormState(prev => ({
@@ -43,13 +45,11 @@ const Login = () => {
     }
   };
 
-  // Password validation
   const validatePassword = (password) => {
     if (!password) return 'Password is required.';
     return '';
   };
 
-  // Form validation
   const validateForm = () => {
     const errors = {
       email: validateEmail(formData.email),
@@ -64,7 +64,6 @@ const Login = () => {
     return Object.keys(errors).length === 0;
   };
 
-  // Form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -89,26 +88,32 @@ const Login = () => {
 
       if (token) {
         login(response.data, token);
-
-        // Redirect user based on role
         setTimeout(() => {
-          const redirectPath = role === "employer" ? "/employer-dashboard" : "/find-jobs";
-          window.location.href = redirectPath;
-        }, 1500);
+          window.location.href =
+            role === "employer"
+              ? "/employer-dashboard"
+              : "/find-jobs";
+        }, 2000);
       }
+      setTimeout(() => {
+        const redirectPath =
+          User.role === "employer"
+            ? "/employer-dashboard"
+            : "/find-jobs";
+        window.location.href = redirectPath;
+      }, 1500);
 
     } catch (error) {
       setFormState(prev => ({
         ...prev,
         loading: false,
         errors: {
-          submit: error.response?.data?.message || 'Login failed. Please check your credentials.'
+          submit: error.response?.data?.message || 'Login failed. Please check your crendential.'
         }
       }));
     }
   };
 
-  // If login success, show confirmation page
   if (formState.success) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -123,7 +128,7 @@ const Login = () => {
             You have been successfully logged in.
           </p>
           <div className='animate-spin w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full mx-auto'></div>
-          <p className="text-sm text-gray-500 mt-2">Redirecting to your dashboard...</p>
+          <p className="text-sm text-gray-500 mt-2">Redirecting to your dashboard.</p>
         </motion.div>
       </div>
     );
@@ -139,11 +144,11 @@ const Login = () => {
       >
         <div className="text-center mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome Back</h2>
-          <p className="text-gray-600">Sign in to your CareerConnect account</p>
+          <p className="text-gray-600">Sign in to your CarrerConnect account</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Email */}
+          {/* email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Email Address
@@ -155,7 +160,7 @@ const Login = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full pl-10 pr-10 py-3 rounded-lg border ${formState.errors.email ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
+                className={`w-full pl-10 pr-10 py-3 rounded-lg border ${formState.errors.email ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors `}
                 placeholder="Enter your email"
               />
             </div>
@@ -166,8 +171,7 @@ const Login = () => {
               </p>
             )}
           </div>
-
-          {/* Password */}
+          {/* password */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Password
@@ -180,7 +184,7 @@ const Login = () => {
                 value={formData.password}
                 onChange={handleInputChange}
                 autoComplete="new-password"
-                className={`w-full pl-10 pr-10 py-3 rounded-lg border ${formState.errors.password ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors`}
+                className={`w-full pl-10 pr-10 py-3 rounded-lg border ${formState.errors.email ? 'border-red-500' : 'border-gray-300'} focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors `}
                 placeholder="Enter your password"
               />
               <button
@@ -199,7 +203,7 @@ const Login = () => {
             )}
           </div>
 
-          {/* Submit error */}
+          {/* submit error */}
           {formState.errors.submit && (
             <div className='bg-red-50 border border-red-200 rounded-lg p-3'>
               <p className='text-red-700 text-sm flex items-center'>
@@ -209,7 +213,7 @@ const Login = () => {
             </div>
           )}
 
-          {/* Submit button */}
+          {/* submit button */}
           <button
             type='submit'
             disabled={formState.loading}
@@ -224,8 +228,7 @@ const Login = () => {
               <span>Sign In</span>
             )}
           </button>
-
-          {/* Sign up link */}
+          {/* sign up link */}
           <div className="text-center">
             <p className="text-gray-600">
               Don't have an account?{' '}
@@ -237,7 +240,7 @@ const Login = () => {
         </form>
       </motion.div>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
